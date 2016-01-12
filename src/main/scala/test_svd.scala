@@ -50,10 +50,10 @@ object test_svd
                                                     data.map{case entryVal => 
                                                         new MatrixEntry(entryVal(0).toLong-1, entryVal(1).toLong-1, entryVal(2).toDouble)}
                                                                     )
+        println("dataCoordMatrix dimensions: [" + dataCoordMatrix.numRows + " x " + dataCoordMatrix.numCols + "]")
         val matData: RowMatrix = dataCoordMatrix.toRowMatrix 
         t2 = System.nanoTime()
         println("Data converted to RowMatrix, time [sec]: " + (t2-t1)/GIGS)
-        println("matData dimensions: [" + matData.numRows + " x " + matData.numCols + "]")
 
         // find svd of matrix matData
         println("Starting SVD...")
@@ -63,8 +63,8 @@ object test_svd
         println("SVD computed, time [sec]: " + (t2-t1)/GIGS)
 
         println("Total program run-time [sec]: " + (t2-t0)/GIGS)
-//        println("Driver Mem. [MB]: " + (conf.getSizeAsBytes("spark.driver.memory").toDouble/(1024*1024)))
-//        println("Driver cores: " + (conf.getOption("spark.driver.cores")))
-//        println("Executor cores: " + (conf.getOption("spark.executor.cores")))
+        // println("Driver Mem. [MB]: " + (conf.getSizeAsBytes("spark.driver.memory").toDouble/(1024*1024)))
+        // println("Driver cores: " + (conf.getOption("spark.driver.cores")))
+        // println("Executor cores: " + (conf.getOption("spark.executor.cores")))
     }
 }
