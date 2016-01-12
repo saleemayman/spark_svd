@@ -35,8 +35,8 @@ object test_svd
         val data1: RDD[Array[Double]] = sc.textFile(file).map(line => line.split(delimiter).map(_.toDouble))
         //val data: RDD[Array[Double]] = sc.textFile(file, numPartitions).map(line => line.split(delimiter).map(_.toDouble)).cache()
         println("1. RDD num. of Partitions: " + data1.partitions.size)
-        val data: RDD[Array[Double]] = data1.coalesce(numPartitions, false).cache()
-        //val data: RDD[Array[Double]] = data1.repartition(numPartitions).cache()
+        //val data: RDD[Array[Double]] = data1.coalesce(numPartitions, false).cache()
+        val data: RDD[Array[Double]] = data1.repartition(numPartitions).cache()
 
         t2 = System.nanoTime()
         println("File-to-RDD time [sec]: " + (t2-t1)/GIGS)
