@@ -24,7 +24,7 @@ object test_svd
         var t2: Long = 0
 
         // read input data file name
-        val file: String = args(0)  
+        val file: String = args(0)
         val delimiter: String = args(1) 
         val numPartitions: Int = args(2).toInt 
         val numSingularValues: Int = args(3).toInt 

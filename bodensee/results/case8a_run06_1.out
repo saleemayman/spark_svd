@@ -1,0 +1,12 @@
+sparkSubmit --class test_svd --master spark://konstanz:7077 --deploy-mode client  --executor-memory 4g --conf spark.cores.max=64 --conf spark.task.cpus=1 --conf spark.executor.cores=1 --conf spark.default.parallelism=64 --conf spark.broadcast.blockSize=4096 spark_svd/target/scala-2.10/testsvdtaxi_2.10-1.0.jar data/ratings10MNoTime.dat , 64 100
+Input file name: data/ratings10MNoTime.dat
+1. RDD num. of Partitions: 4
+File-to-RDD time [sec]: 0
+2. RDD num. of Partitions: 64
+Number of entries: 10000054
+Number of cols per entry: 3
+dataCoordMatrix dimensions: [71567 x 65133]
+Data converted to RowMatrix, time [sec]: 1
+Starting SVD...
+SVD computed, time [sec]: 472
+Total program run-time [sec]: 499

@@ -1,0 +1,8 @@
+Input file name: data/taxiTrips2010.csv
+1. RDD num. of Partitions: 384
+2. RDD num. of Partitions: 384
+Data converted to RowMatrix, time [sec]: 38
+matData dimensions: [87975 x 1000001]
+Starting SVD...
+SVD computed, time [sec]: 334
+Total program run-time [sec]: 445

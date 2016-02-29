@@ -1,0 +1,8 @@
+Input file name: data/ratings21M.csv
+1. RDD num. of Partitions: 24
+2. RDD num. of Partitions: 24
+Data converted to RowMatrix, time [sec]: 41
+matData dimensions: [29584 x 1000001]
+Starting SVD...
+SVD computed, time [sec]: 236
+Total program run-time [sec]: 352

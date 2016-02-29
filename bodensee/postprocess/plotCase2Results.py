@@ -35,11 +35,15 @@ def main(argv):
     ax.xaxis.set_ticks(range(0, 288+1, 24))
     ax.set_xlabel('RDD Partitions')
     ax.set_ylabel('Time to compute SVD [sec]')
-    ax.legend(loc="best", prop={'size':8})
-    ax.set_title(plotTitle)
+    # ax.legend(loc="best", prop={'size':8})
+    handles, labels = ax.get_legend_handles_labels()
+    labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
+    ax.legend(handles, labels)
+    ax.legend(loc='best', title='Executor Configuration:', prop={'size':9})
+    # ax.set_title(plotTitle)
 
     ax.annotate('Workers=3\ncores/Worker=32\nMax. Cores=96',
-                 xy=(-155, -145), xycoords='axes pixels',
+                 xy=(-155, -180), xycoords='axes pixels',
                  bbox=dict(boxstyle='square', fc='yellow', alpha=0.3))
     plt.show()
 

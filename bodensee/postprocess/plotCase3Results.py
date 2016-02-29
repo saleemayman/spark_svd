@@ -41,12 +41,12 @@ def main(argv):
         yStart = 0
         for j in range(0, numStacks):
             part = int(partitions[np.where(dataForCore[j, 2] == partitions)[0]])
-            ax.bar(i, dataForCore[j, 3], 0.5, bottom=yStart, align='center',
+            ax.bar(i, dataForCore[j, 3], 0.75, bottom=yStart, align='center',
                 color=cmap[np.where(dataForCore[j, 2] == partitions)[0]], label=str(part))
 
             ax.text(i, yStart + dataForCore[j, 3]/2, str(part) + " [" + str(int(dataForCore[j, 3])) + "%]", 
-                zorder=10, rotation=90, color='w', horizontalalignment='center',
-                verticalalignment='center', fontsize=8, weight='heavy')
+                zorder=10, rotation=00, color='k', horizontalalignment='center',
+                verticalalignment='center', fontsize=9, weight='heavy')
 
             yStart = yStart + dataForCore[j, 3]
 
@@ -65,7 +65,7 @@ def main(argv):
         if label not in newLabels:
             newLabels.append(label)
             newHandles.append(handle)
-    plt.legend(newHandles, newLabels)
+    plt.legend(newHandles, newLabels, title='RDD partitions')
 
     ax.set_title(plotTitle)
     plt.show()
