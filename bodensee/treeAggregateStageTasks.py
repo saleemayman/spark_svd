@@ -19,28 +19,40 @@ def get_rand_color(val):
 
 def main(argv):
     logFileName = sys.argv[1]
-    plotTitle = sys.argv[2]
+    isTask = sys.argv[2]
+    plotTitle = sys.argv[3]
     print logFileName
     
     # get csv file from current directory
-    resultsCSV = sorted(glob.glob(logFileName + '.*_taskTimes.csv'))
+    if isTask == 'y': 
+        resultsCSV = sorted(glob.glob(logFileName + '.*_taskTimes.csv'))
+        xLabel = 'Task Execution Times [msec]'
+        yLabel = 'Number of Tasks'
+    else:
+        resultsCSV = sorted(glob.glob(logFileName + '.*_stageTimes.csv'))
+        xLabel = 'Stage Execution Times [msec]'
+        yLabel = 'Number of Stages'
 
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
 
     temp = np.genfromtxt(resultsCSV[0], delimiter = ',')
-    for j in range(1, len(resultsCSV)):
+    for j in range(1, len(resultsCSV)):     # TODO: check if range should start from 0 or 1
         temp1 = np.genfromtxt(resultsCSV[j], delimiter = ',')
         data = np.concatenate((temp1, temp))
         temp = data
         temp1 = []
 
-    taskTimes = data[:, 4] - data[:, 3]
-    ax1.hist(taskTimes, bins=1000)
-    ax1.set_xlim([400, 2000])
+    if isTask == 'y':
+        taskOrStageTimes = data[:, 4] - data[:, 3]
+    else:
+        taskOrStageTimes = data[:, 3] - data[:, 2]
 
-    ax1.set_xlabel('Task Execution Times [msec]')
-    ax1.set_ylabel('Number of Tasks')
+    ax1.hist(taskOrStageTimes, bins=2000)
+    ax1.set_xlim([500, 2000])
+
+    ax1.set_xlabel(xLabel)
+    ax1.set_ylabel(yLabel)
     ax1.set_title(logFileName)
     plt.show()
 

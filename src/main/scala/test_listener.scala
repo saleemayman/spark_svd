@@ -1,6 +1,7 @@
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkContext._
-import org.apache.spark.SparkConf
+// import org.apache.spark.SparkContext
+// import org.apache.spark.SparkContext._
+// import org.apache.spark.SparkConf
+import org.apache.spark.{SparkContext,SparkConf}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.scheduler._
 // import org.apache.spark.scheduler.{SparListenerStageSubmitted, SparkListener, SparkListenerJobStart}
@@ -13,77 +14,65 @@ import org.apache.spark.mllib.linalg.distributed.{CoordinateMatrix, MatrixEntry}
 
 
 class CustomSparkListener extends SparkListener {
-    // override def onJobStart(jobStart: SparkListenerJobStart) {
-    //     println(s"-> Job started with ${jobStart.stageInfos.size} stages: $jobStart")
-    // }
-
     var sumOfTasks: Int = 0
     val stageName: String = "treeAggregate"
     var stageIds: Array[Int] = Array()
     var taskTimes: Array[Long] = Array()
 
     override def onStageSubmitted(stageSubmitted: SparkListenerStageSubmitted): Unit = {
-
         stageIds :+= stageSubmitted.stageInfo.stageId
         if ((stageSubmitted.stageInfo.name).take(stageName.length) == stageName)
         {
             sumOfTasks = sumOfTasks + stageSubmitted.stageInfo.numTasks
-            // println(s"Stage: ${stageSubmitted.stageInfo.stageId} Tasks: ${stageSubmitted.stageInfo.numTasks}")
         }
     }
 
-    override def onTaskStart(taskStarted: SparkListenerTaskStart): Unit = {
-       // println(s"-> Task ${taskStarted.taskInfo.taskId} [Stage Id: ${taskStarted.stageId}] started at ${taskStarted.taskInfo.launchTime} with a ${taskStarted.taskInfo.finishTime} finish time.")
+    override def onStageCompleted(stageCompleted: SparkListenerStageCompleted): Unit = {
+        val avgTaskTime: Double = (taskTimes.sum).toDouble/sumOfTasks.toDouble
+        println(s"Current Total Task Times: ${taskTimes.sum} [msec], Average task time: ${avgTaskTime} [msec], array size: ${taskTimes.size}, treeAggregate Tasks: ${sumOfTasks} [Stages: ${stageIds.size}].")
+    }
 
+    override def onTaskStart(taskStarted: SparkListenerTaskStart): Unit = {
         taskTimes :+= (0).toLong
     }
 
     override def onTaskEnd(taskEnded: SparkListenerTaskEnd): Unit = {
-        // println(s"-> Task ${taskEnded.taskInfo.taskId} launched at ${taskEnded.taskInfo.launchTime} with a ${taskEnded.taskInfo.duration} duration and finshed at ${taskEnded.taskInfo.finishTime}. Task type: ${taskEnded.taskType}.")
-        
         taskTimes(taskEnded.taskInfo.taskId.toInt) = taskEnded.taskInfo.duration
-
-        // if ( taskEnded.stageId == stageIds(taskEnded.stageId) )
-        // {
-        //    println(s"Stage: ${taskEnded.stageId} Task: ${taskEnded.taskInfo.taskId}")
-        //    taskTimes(taskEnded.taskInfo.taskId.toInt) = taskEnded.taskInfo.duration
-        // }
-
-        // println("--> Task duration: ${taskTimes(taskEnded.taskInfo.taskId)} [msec]")
     }
 
     override def onApplicationEnd(appEnded: SparkListenerApplicationEnd): Unit = {
         val avgTaskTime: Double = (taskTimes.sum).toDouble/sumOfTasks.toDouble
-        println(s"Total Task Times: ${taskTimes.sum} [msec], Average task time: ${avgTaskTime} [msec], array size: ${taskTimes.size}, treeAggregate Tasks: ${sumOfTasks} [Stages: ${stageIds.size}].")
+        println(s"-> Total Task Times: ${taskTimes.sum} [msec], Average task time: ${avgTaskTime} [msec], array size: ${taskTimes.size}, treeAggregate Tasks: ${sumOfTasks} [Stages: ${stageIds.size}].")
     }
-
-    // def processTaskTimes(): Double = {
-    //     val avgTaskTime: Double = (taskTimes.sum).toDouble/(taskTimes.size).toDouble
-    //     println(s"Average task time: ${avgTaskTime} [msec]")
-
-    //     avgTaskTime
-    // }
 }
 
-
-object test_listen
+// class movieLensSVD(sc: SparkContext)
+class movieLensSVD extends java.io.Serializable 
 {
-    val conf = new SparkConf().setAppName("testSvd1")
-    val sc = new SparkContext(conf)
+    val delimiter: String = ","
+    var dataFile: String = ""
 
-    def main(args: Array[String])
+    def this(dataFile: String)
     {
-        val file: String = args(0)
-        val delimiter: String = ","
+        // this(sc)
+        this()
+        this.dataFile = dataFile
+        println("--> movieLensSVD object instantiated! data file name: " + this.dataFile)
+    }
+
+    // def addListener() {}
+
+    def computeMovieLensSVD()
+    {
+        // val file: String = args(0)
+        // val delimiter: String = ","
 
         // attach an events listener for the job
         val myListener: SparkListener = new CustomSparkListener()
-        sc.addSparkListener(myListener: SparkListener)
+        Spark.sc.addSparkListener(myListener: SparkListener)
 
         // do somethign with RDD resulting in actions (to check if the damn listener works)
-        val data: RDD[Array[Double]] = sc.textFile(file).map(line => line.split(delimiter).map(_.toDouble))
-        // data.count
-        // data.first().size
+        val data: RDD[Array[Double]] = Spark.sc.textFile(this.dataFile).map(line => line.split(delimiter).map(_.toDouble))
 
         // compute SVD
         val dataCoordMatrix: CoordinateMatrix = new CoordinateMatrix(
@@ -97,5 +86,35 @@ object test_listen
         // find svd of matrix matData
         println("Starting SVD...")
         val svd: SingularValueDecomposition[RowMatrix, Matrix] = matData.computeSVD(10, computeU = true)
+    }
+}
+
+// class mySVDTuner {}
+// class tunerLogic {}
+object Spark
+{
+    val conf = new SparkConf().setAppName("testTunerSVD1")
+                                .setMaster("spark://oc2343567383.ibm.com:7077")
+                                .set("spark.cores.max", "4")
+                                .set("spark.executor.cores", "1")
+                                .set("spark.executor.memory", "1g")
+    val sc = new SparkContext(conf)
+}
+
+object test_listen
+{
+    // val conf = new SparkConf().setAppName("testSvd1")
+    // val sparkCxt: SparkContext = new SparkContext(conf)
+
+    def main(args: Array[String])
+    {
+        val file: String = args(0)
+
+        val testMovieLensSVDObject: movieLensSVD = new movieLensSVD(file: String)
+        testMovieLensSVDObject.computeMovieLensSVD()
+
+        // println("Computing SVD using an additional Executor!")
+        // val testMovieLensSVDObject_2: movieLensSVD = new movieLensSVD(file: String)
+        // testMovieLensSVDObject_2.computeMovieLensSVD()
     }
 }
