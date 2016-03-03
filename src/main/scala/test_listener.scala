@@ -1,6 +1,3 @@
-// import org.apache.spark.SparkContext
-// import org.apache.spark.SparkContext._
-// import org.apache.spark.SparkConf
 import org.apache.spark.{SparkContext,SparkConf}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.scheduler._
@@ -15,9 +12,12 @@ import org.apache.spark.mllib.linalg.distributed.{CoordinateMatrix, MatrixEntry}
 
 class CustomSparkListener extends SparkListener {
     var sumOfTasks: Int = 0
+    var numTreeAggStages: Int = 0
     val stageName: String = "treeAggregate"
     var stageIds: Array[Int] = Array()
     var taskTimes: Array[Long] = Array()
+    var avgStageTimes: Array[Double] = new Array(10)
+    var lastStageTaskAvg: Double = 0
 
     override def onStageSubmitted(stageSubmitted: SparkListenerStageSubmitted): Unit = {
         stageIds :+= stageSubmitted.stageInfo.stageId
@@ -25,11 +25,42 @@ class CustomSparkListener extends SparkListener {
         {
             sumOfTasks = sumOfTasks + stageSubmitted.stageInfo.numTasks
         }
+
+        // if (stageSubmitted.stageInfo.stageId == 0)
+        // {
+        //     avgStageTimes :+= 0.toDouble
+        // }
     }
 
     override def onStageCompleted(stageCompleted: SparkListenerStageCompleted): Unit = {
+        val rddPartitions: Int = Spark.sc.getRDDStorageInfo(0).numPartitions
         val avgTaskTime: Double = (taskTimes.sum).toDouble/sumOfTasks.toDouble
-        println(s"Current Total Task Times: ${taskTimes.sum} [msec], Average task time: ${avgTaskTime} [msec], array size: ${taskTimes.size}, treeAggregate Tasks: ${sumOfTasks} [Stages: ${stageIds.size}].")
+        // lastStageTaskAvg = avgStageTimes.last
+        // avgStageTimes :+= avgTaskTime
+        // println(s"Current ttl TT: ${taskTimes.sum} [msec], Avg. TT: ${avgTaskTime} [msec], last Avg. ${lastStageTaskAvg}, array size: ${taskTimes.size}, treeAggregate Tasks: ${sumOfTasks} [Stages: ${stageIds.size}].")
+
+        // if (stageCompleted.stageInfo.stageId > 50 && avgTaskTime < (lastStageTaskAvg - 10))
+        // {
+        //     // val isKilled: Boolean = Spark.sc.killExecutor("0")
+        //     println(s"--> Stage: ${stageCompleted.stageInfo.stageId}, Last Avg: ${avgTaskTime}, newAvg: ${lastStageTaskAvg}.")
+        // }
+        if ((stageCompleted.stageInfo.name).take(stageName.length) == stageName && rddPartitions == stageCompleted.stageInfo.rddInfos(0).numPartitions)
+        {
+            val t: Double = (stageCompleted.stageInfo.completionTime.get).toDouble - (stageCompleted.stageInfo.submissionTime.get).toDouble
+            avgStageTimes(numTreeAggStages) = stageCompleted.stageInfo.completionTime.get
+            println(s"--> TreeAgg stages: ${numTreeAggStages}, Stage: ${stageCompleted.stageInfo.name}, Stage time: ${t}")
+
+            if (numTreeAggStages > 8)
+            {
+                val avgOfTenStages: Double = avgStageTimes.sum/(avgStageTimes.size).toDouble
+                // println(s"--> Avg. of 10 stages: ${avgOfTenStages}, Stages: ${avgStageTimes.size}")
+                numTreeAggStages = 0
+            }
+            else
+            {
+                numTreeAggStages = numTreeAggStages + 1
+            }
+        }
     }
 
     override def onTaskStart(taskStarted: SparkListenerTaskStart): Unit = {
@@ -64,17 +95,15 @@ class movieLensSVD extends java.io.Serializable
 
     def computeMovieLensSVD()
     {
-        // val file: String = args(0)
-        // val delimiter: String = ","
-
         // attach an events listener for the job
         val myListener: SparkListener = new CustomSparkListener()
         Spark.sc.addSparkListener(myListener: SparkListener)
 
         // do somethign with RDD resulting in actions (to check if the damn listener works)
-        val data: RDD[Array[Double]] = Spark.sc.textFile(this.dataFile).map(line => line.split(delimiter).map(_.toDouble))
+        val data: RDD[Array[Double]] = Spark.sc.textFile(this.dataFile, 8).map(line => line.split(delimiter).map(_.toDouble))
 
         // compute SVD
+        data.cache()
         val dataCoordMatrix: CoordinateMatrix = new CoordinateMatrix(
                                                     data.map{case entryVal => 
                                                         new MatrixEntry(entryVal(0).toLong-1, entryVal(1).toLong-1, entryVal(2).toDouble)}
@@ -95,7 +124,7 @@ object Spark
 {
     val conf = new SparkConf().setAppName("testTunerSVD1")
                                 .setMaster("spark://oc2343567383.ibm.com:7077")
-                                .set("spark.cores.max", "4")
+                                .set("spark.cores.max", "2")
                                 .set("spark.executor.cores", "1")
                                 .set("spark.executor.memory", "1g")
     val sc = new SparkContext(conf)
@@ -103,18 +132,11 @@ object Spark
 
 object test_listen
 {
-    // val conf = new SparkConf().setAppName("testSvd1")
-    // val sparkCxt: SparkContext = new SparkContext(conf)
-
     def main(args: Array[String])
     {
         val file: String = args(0)
 
         val testMovieLensSVDObject: movieLensSVD = new movieLensSVD(file: String)
         testMovieLensSVDObject.computeMovieLensSVD()
-
-        // println("Computing SVD using an additional Executor!")
-        // val testMovieLensSVDObject_2: movieLensSVD = new movieLensSVD(file: String)
-        // testMovieLensSVDObject_2.computeMovieLensSVD()
     }
 }
