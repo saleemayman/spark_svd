@@ -162,14 +162,20 @@ object tunerLogic
         this.maxCores = maxCores - (maxCores % 4)
 
         initMaxCoreScenarios()
-        executeScenarios()
+        executeInitialScenarios()
     }
 
-    private def executeScenarios(): Unit = {
+    private def executeInitialScenarios(): Unit = {
         for ( (k, v) <- testScenarioMaxCores )
         {
             testScenarioRunTimes(k) = movieLensSVD.runTest(dataFile, v(0).toString, v(1).toString, execMem)
         }
+    }
+
+    private def checkTestResults(): Unit = {
+        val sortedScenarios: scala.collection.immutable.ListMap[String, Double] = ListMap(testScenarioRunTimes.toSeq.sortBy(_._2):_*)
+
+        if ()
     }
 
     private def initMaxCoreScenarios(): Unit = {
@@ -195,7 +201,7 @@ object tunerLogic
     }
 }
 
-object test_object
+object test_tuner
 {
 
     def main(args: Array[String])
