@@ -1,3 +1,5 @@
+import scala.collection.mutable.Map
+import scala.collection.immutable.ListMap
 import org.apache.spark.{SparkContext,SparkConf}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.scheduler._
@@ -41,6 +43,7 @@ object movieLensSVD
     private var execMem: String = _
 
     private var numTreeAggStages: Int = 1
+    private var avgStageTime: Double = _
     private var treeAggStageTimes: Array[Double] = Array()
 
     private def newContext(maxCores: String, execCores: String, execMem: String): Unit = {
@@ -107,7 +110,7 @@ object movieLensSVD
 
     }
 
-    def runTest(dataFile: String, maxCores: String, execCores: String, execMem: String): Unit = {
+    def runTest(dataFile: String, maxCores: String, execCores: String, execMem: String): Double = {
         println(s"* * * * Start Test => [maxCores: ${maxCores}, execCores: ${execCores}, execMem: ${execMem}] * * * *")
         initContext(dataFile, maxCores, execCores, execMem)
         readData()
@@ -116,6 +119,7 @@ object movieLensSVD
         computeMovieLensSVD()
         stopSparkContext()
         println(s"* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *")
+        avgStageTime
     }
 
     def getMainRDDNumPartitions(): Int = {
@@ -123,7 +127,7 @@ object movieLensSVD
     }
 
     def computeStageStats(): Unit = {
-        val avgStageTime: Double = treeAggStageTimes.sum/numTreeAggStages.toDouble
+        avgStageTime = treeAggStageTimes.sum/numTreeAggStages.toDouble
         println(s"Listener --> avgTreeAggStageTime: ${avgStageTime}, numTreeAggStages: ${numTreeAggStages}")
     }
 
@@ -143,17 +147,63 @@ object movieLensSVD
 }
 
 // class mySVDTuner {}
-// class tunerLogic {}
+
+object tunerLogic
+{
+    private var dataFile: String = _
+    private var maxCores: Int = _
+    private var execCores: Int = _
+    private var execMem: String = "1g"  // hard-coded for now
+    private var testScenarioRunTimes: scala.collection.mutable.Map[String, Double] = Map[String, Double]()
+    private var testScenarioMaxCores: scala.collection.mutable.Map[String, Array[Int]] = Map[String, Array[Int]]()
+
+    def initTuning(dataFile: String, maxCores: Int): Unit = {
+        this.dataFile = dataFile
+        this.maxCores = maxCores - (maxCores % 4)
+
+        initMaxCoreScenarios()
+        executeScenarios()
+    }
+
+    private def executeScenarios(): Unit = {
+        for ( (k, v) <- testScenarioMaxCores )
+        {
+            testScenarioRunTimes(k) = movieLensSVD.runTest(dataFile, v(0).toString, v(1).toString, execMem)
+        }
+    }
+
+    private def initMaxCoreScenarios(): Unit = {
+        var coreStride: Int = maxCores/4
+        var cores: Int = 0
+        var i: Int  = 0
+        while (i < 3)
+        {
+            cores = (maxCores - (coreStride * i)).toInt
+            testScenarioMaxCores += ((i + 1).toString -> Array(cores, cores))
+            testScenarioRunTimes += ((i + 1).toString -> 0.toDouble)
+            i = i + 1
+        }
+    }
+
+    def getTestResults(): Unit = {
+        val sortedScenarios: scala.collection.immutable.ListMap[String, Double] = ListMap(testScenarioRunTimes.toSeq.sortBy(_._2):_*)
+
+        for ( (k, v) <- sortedScenarios )
+        {
+            println(s"Test: ${k} -> Avg. Stage Time: ${v} [msec], Config: [max.cores: ${testScenarioMaxCores(k)(0)}, exec.cores: ${testScenarioMaxCores(k)(1)}, exec.mem: ${execMem}]")
+        }
+    }
+}
 
 object test_object
 {
+
     def main(args: Array[String])
     {
         val file: String = args(0)
 
-        movieLensSVD.runTest(file, "1", "1", "1g")
-        movieLensSVD.runTest(file, "2", "1", "1g")
-        movieLensSVD.runTest(file, "2", "2", "1g")
+        tunerLogic.initTuning(file, 4)
+        tunerLogic.getTestResults()
 
         println("test_object will now exit!")
     }
