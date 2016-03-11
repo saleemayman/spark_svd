@@ -156,6 +156,7 @@ object tunerLogic
     private var execMem: String = "1g"  // hard-coded for now
     private var testScenarioRunTimes: scala.collection.mutable.Map[String, Double] = Map[String, Double]()
     private var testScenarioMaxCores: scala.collection.mutable.Map[String, Array[Int]] = Map[String, Array[Int]]()
+    var maxCoresTimeThreshold: Double = 0.10
 
     def initTuning(dataFile: String, maxCores: Int): Unit = {
         this.dataFile = dataFile
@@ -163,6 +164,7 @@ object tunerLogic
 
         initMaxCoreScenarios()
         executeInitialScenarios()
+        checkTestResults()
     }
 
     private def executeInitialScenarios(): Unit = {
@@ -173,9 +175,14 @@ object tunerLogic
     }
 
     private def checkTestResults(): Unit = {
-        val sortedScenarios: scala.collection.immutable.ListMap[String, Double] = ListMap(testScenarioRunTimes.toSeq.sortBy(_._2):_*)
-
-        if ()
+        val sortedScenarios: scala.collection.immutable.ListMap[String, Double] = ListMap(testScenarioRunTimes.toSeq.sortBy(_._1):_*)
+        var minTime: Double = testScenarioRunTimes.minBy(_._2)._2
+        var changeRatio: Double = 1
+        for ( (k, v) <- sortedScenarios )
+        {
+            changeRatio = 1.0 - minTime/v
+            println(s"Test: ${k} ->  Avg. Stage Time: ${v} [msec], changeRatio: ${changeRatio}")
+        }
     }
 
     private def initMaxCoreScenarios(): Unit = {
@@ -189,6 +196,8 @@ object tunerLogic
             testScenarioRunTimes += ((i + 1).toString -> 0.toDouble)
             i = i + 1
         }
+        // testScenarioMaxCores += ("4" -> Array(1, 1))
+        // testScenarioRunTimes += ("4" -> 0.toDouble)
     }
 
     def getTestResults(): Unit = {
