@@ -91,12 +91,12 @@ object movieLensSVD
                                                     data.map{case entryVal => 
                                                         new MatrixEntry(entryVal(0).toLong-1, entryVal(1).toLong-1, entryVal(2).toDouble)}
                                                                     )
-        println("dataCoordMatrix dimensions: [" + dataCoordMatrix.numRows + " x " + dataCoordMatrix.numCols + "]")
+        // println("dataCoordMatrix dimensions: [" + dataCoordMatrix.numRows + " x " + dataCoordMatrix.numCols + "]")
         val matData: RowMatrix = dataCoordMatrix.toRowMatrix 
-        println("Data converted to RowMatrix.")
+        // println("Data converted to RowMatrix.")
 
         // find svd of matrix matData
-        println("Starting SVD...")
+        // println("Starting SVD...")
         val svd: SingularValueDecomposition[RowMatrix, Matrix] = matData.computeSVD(20, computeU = true)
     }
 
@@ -106,7 +106,7 @@ object movieLensSVD
         this.execCores = execCores
         this.execMem = execMem
         newContext(this.maxCores, this.execCores, this.execMem)
-        println("--> movieLensSVD object instantiated! data file name: " + dataFile)
+        // println("--> movieLensSVD object instantiated! data file name: " + dataFile)
 
     }
 
@@ -152,29 +152,37 @@ object tunerLogic
 {
     private var dataFile: String = _
     private var maxCores: Int = _
+    private var numWorkers: Int = _
+    private var numTuningParams: Int = _
     private var execCores: Int = _
     private var execMem: String = "1g"  // hard-coded for now
-    private var testScenarios: scala.collection.mutable.Map[String, scala.collection.mutable.Map[String, Int]] = Map[String, Map[String, Int]]()
+    private var testScenarios: scala.collection.mutable.Map[String, scala.collection.mutable.Map[String, Array[Int]]] = Map[String, Map[String, Array[Int]]]()
     private var testScenarioTimes: scala.collection.mutable.Map[String, scala.collection.mutable.Map[String, Double]] = Map[String, Map[String, Double]]()
+    private var unfitScenarios: scala.collection.mutable.Map[String, scala.collection.mutable.Map[String, (Array[Int], Double)]] = 
+                                                                                                            Map[String, Map[String, (Array[Int], Double)]]()
     private var testScenarioMaxCoresTP: scala.collection.mutable.Map[String, Array[Int]] = Map[String, Array[Int]]()
-    var maxCoresTimeThreshold: Double = 0.10
+    var maxCoresTimeThreshold: Double = 0.05
 
-    def initTuning(dataFile: String, tuningParams: Map[String, Int], maxCores: Int): Unit = {
+    def initTuning(dataFile: String, tuningParams: Map[String, Int], numWorkers: Int, maxCores: Int): Unit = {
         this.dataFile = dataFile
+        this.numWorkers = numWorkers
         this.maxCores = maxCores - (maxCores % 4)
+        this.numTuningParams = tuningParams.size
 
         initScenarios(tuningParams)
-        executeScenarioFor("max.cores")
-        checkTestResults("max.cores")
+        initMaxCoreScenarios()
+        executeScenariosFor("max.cores")
+        // initExecCoreScenarios()
+        // executeScenariosFor("exec.cores")
     }
 
     private def initScenarios(tuningParams: Map[String, Int]): Unit = {
         for ((k, v) <- tuningParams)
         {
-            testScenarios += (k -> Map[String, Int]())
+            testScenarios += (k -> Map[String, Array[Int]]())
+            unfitScenarios += (k -> Map[String, (Array[Int], Double)]())
             testScenarioTimes += (k -> Map[String, Double]())
         }
-        initMaxCoreScenarios()
     }
 
     private def initMaxCoreScenarios(): Unit = {
@@ -184,18 +192,38 @@ object tunerLogic
         while (cores > (maxCores * 0.25))
         {
             cores = (maxCores - (coreStride * i)).toInt
-            testScenarios("max.cores") += ((i + 1).toString -> cores)
+            testScenarios("max.cores") += ((i + 1).toString -> Array(cores, cores, 1))
             testScenarioTimes("max.cores") += ((i + 1).toString -> 0.toDouble)
             i = i + 1
         }
     }
 
-    private def executeScenarioFor(tuningParameter: String): Unit = {
-        val sortedScenariosToTest: scala.collection.immutable.ListMap[String, Int] = ListMap(testScenarios(tuningParameter).toSeq.sortBy(_._1):_*)
+    private def initExecCoreScenarios(): Unit = {
+        var scenarioMaxCores: Int = maxCores
+        var coresPerExec: Int = maxCores
+        var i: Int = 0
+
+        for ( (k, v) <- testScenarios("max.cores"))
+        {
+            scenarioMaxCores = v(0)
+            coresPerExec = scenarioMaxCores - 1
+            while (coresPerExec > 0)
+            {
+                testScenarios("exec.cores") += ((i + 1).toString -> Array(scenarioMaxCores, coresPerExec, 1))
+                testScenarioTimes("exec.cores") += ((i + 1).toString -> 0.toDouble)
+                coresPerExec = coresPerExec - 1
+                i = i + 1
+            }
+        }
+    }
+
+    private def executeScenariosFor(tuningParameter: String): Unit = {
+        val sortedScenariosToTest: scala.collection.immutable.ListMap[String, Array[Int]] = ListMap(testScenarios(tuningParameter).toSeq.sortBy(_._1):_*)
         for ( (k, v) <- sortedScenariosToTest )
         {
-            testScenarioTimes(tuningParameter)(k) = movieLensSVD.runTest(dataFile, v.toString, v.toString, execMem)
+            testScenarioTimes(tuningParameter)(k) = movieLensSVD.runTest(dataFile, v(0).toString, v(1).toString, execMem)
         }
+        checkTestResults(tuningParameter)
     }
 
     private def checkTestResults(tuningParameter: String): Unit = {
@@ -206,16 +234,22 @@ object tunerLogic
         {
             changeRatio = 1.0 - minTime/v
             println(s"Test: ${k} ->  Avg. Stage Time: ${v} [msec], changeRatio: ${changeRatio}")
+
+            // prune the scenarios for the current TP
+            if (changeRatio > maxCoresTimeThreshold)
+            {
+                unfitScenarios(tuningParameter) += (k -> (testScenarios(tuningParameter).remove(k).get, testScenarioTimes(tuningParameter).remove(k).get))
+            }
         }
     }
 
-
     def getTestResults(tuningParameter: String): Unit = {
-        val sortedScenarios: scala.collection.immutable.ListMap[String, Double] = ListMap(testScenarioTimes(tuningParameter).toSeq.sortBy(_._2):_*)
+        val sortedScenarios: scala.collection.immutable.ListMap[String, Double] = ListMap(testScenarioTimes(tuningParameter).toSeq.sortBy(_._1):_*)
 
         for ( (k, v) <- sortedScenarios )
         {
-            println(s"Test: ${k} -> Avg. Stage Time: ${v} [msec], Config: [max.cores: ${testScenarioMaxCoresTP(k)(0)}, exec.cores: ${testScenarioMaxCoresTP(k)(1)}, exec.mem: ${execMem}]")
+            println(s"key: ${k}")
+            println(s"Test: ${k} -> Avg. Stage Time: ${v} [msec], Config: [max.cores: ${testScenarios(tuningParameter)(k)(0)}, exec.cores: ${testScenarios(tuningParameter)(k)(1)}, exec.mem: ${execMem}]")
         }
     }
 }
@@ -225,11 +259,14 @@ object test_tuner
 
     def main(args: Array[String])
     {
+        val numWorkers: Int = 1
+        val maxCores: Int = 4
         val file: String = args(0)
         val tuningParams: Map[String, Int] = Map("max.cores" -> 1, "exec.cores" -> 2, "exec.mem" -> 3)
 
-        tunerLogic.initTuning(file, tuningParams, 4)
+        tunerLogic.initTuning(file, tuningParams, numWorkers, maxCores)
         tunerLogic.getTestResults("max.cores")
+        // tunerLogic.getTestResults("exec.cores")
 
         println("test_object will now exit!")
     }
