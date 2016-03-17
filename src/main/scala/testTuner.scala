@@ -48,7 +48,7 @@ object movieLensSVD
 
     private def newContext(maxCores: String, execCores: String, execMem: String): Unit = {
         this.conf = new SparkConf().setAppName("testTunerSVD1")
-                                .setMaster("spark://oc2343567383.ibm.com:7077")
+                                .setMaster("spark://konstanz:7077")
                                 .set("spark.cores.max", maxCores)
                                 .set("spark.default.parallelism", maxCores)
                                 .set("spark.executor.cores", execCores)
@@ -68,7 +68,7 @@ object movieLensSVD
 
     private def readData(): Unit = {
         val delimiter: String = ","
-        data = sc.textFile(this.dataFile, maxCores.toInt).map(line => line.split(delimiter).map(_.toDouble))
+        data = sc.textFile(this.dataFile).map(line => line.split(delimiter).map(_.toDouble))
         data.cache()
         println("readData --> data partitions: " + data.partitions.size)
     }
@@ -87,6 +87,7 @@ object movieLensSVD
 
     private def computeMovieLensSVD(): Unit = {
         // compute SVD
+        val t0: Long = System.nanoTime()
         val dataCoordMatrix: CoordinateMatrix = new CoordinateMatrix(
                                                     data.map{case entryVal => 
                                                         new MatrixEntry(entryVal(0).toLong-1, entryVal(1).toLong-1, entryVal(2).toDouble)}
@@ -98,6 +99,8 @@ object movieLensSVD
         // find svd of matrix matData
         // println("Starting SVD...")
         val svd: SingularValueDecomposition[RowMatrix, Matrix] = matData.computeSVD(20, computeU = true)
+        val t1: Long = System.nanoTime()
+        println("SVD computed, time [sec]: " + (t1-t0)/1000000000)
     }
 
     private def initContext(dataFile: String, maxCores: String, execCores: String, execMem: String): Unit = {
@@ -115,7 +118,7 @@ object movieLensSVD
         initContext(dataFile, maxCores, execCores, execMem)
         readData()
         addListener()
-        // rddIncreasePartitions(8)
+        rddIncreasePartitions(maxCores.toInt)
         computeMovieLensSVD()
         stopSparkContext()
         println(s"* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *")
@@ -172,8 +175,8 @@ object tunerLogic
         initScenarios(tuningParams)
         initMaxCoreScenarios()
         executeScenariosFor("max.cores")
-        // initExecCoreScenarios()
-        // executeScenariosFor("exec.cores")
+        initExecCoreScenarios()
+        executeScenariosFor("exec.cores")
     }
 
     private def initScenarios(tuningParams: Map[String, Int]): Unit = {
@@ -186,7 +189,12 @@ object tunerLogic
     }
 
     private def initMaxCoreScenarios(): Unit = {
-        var coreStride: Int = maxCores/4
+        var coreStride: Int = 2
+        if (maxCores > 4)
+        {
+            coreStride = 4
+        }
+
         var cores: Int = 32
         var i: Int  = 0
         while (cores > (maxCores * 0.25))
@@ -206,13 +214,17 @@ object tunerLogic
         for ( (k, v) <- testScenarios("max.cores"))
         {
             scenarioMaxCores = v(0)
-            coresPerExec = scenarioMaxCores - 1
+            coresPerExec = scenarioMaxCores - 2
             while (coresPerExec > 0)
             {
                 testScenarios("exec.cores") += ((i + 1).toString -> Array(scenarioMaxCores, coresPerExec, 1))
                 testScenarioTimes("exec.cores") += ((i + 1).toString -> 0.toDouble)
-                coresPerExec = coresPerExec - 1
+                coresPerExec = coresPerExec - 2
                 i = i + 1
+                // if (scenarioMaxCores % coresPerExec)
+                // {
+                    
+                // }
             }
         }
     }
@@ -248,7 +260,6 @@ object tunerLogic
 
         for ( (k, v) <- sortedScenarios )
         {
-            println(s"key: ${k}")
             println(s"Test: ${k} -> Avg. Stage Time: ${v} [msec], Config: [max.cores: ${testScenarios(tuningParameter)(k)(0)}, exec.cores: ${testScenarios(tuningParameter)(k)(1)}, exec.mem: ${execMem}]")
         }
     }
@@ -260,13 +271,13 @@ object test_tuner
     def main(args: Array[String])
     {
         val numWorkers: Int = 1
-        val maxCores: Int = 4
+        val maxCores: Int = 32
         val file: String = args(0)
         val tuningParams: Map[String, Int] = Map("max.cores" -> 1, "exec.cores" -> 2, "exec.mem" -> 3)
 
         tunerLogic.initTuning(file, tuningParams, numWorkers, maxCores)
         tunerLogic.getTestResults("max.cores")
-        // tunerLogic.getTestResults("exec.cores")
+        tunerLogic.getTestResults("exec.cores")
 
         println("test_object will now exit!")
     }
