@@ -1,0 +1,14 @@
+Testing Scenarios for max.cores:
+       Test: 1, Config: (max.cores: 32, execs: 1.0, exec.cores: 32)
+           SVD Time: 4092.816352327 [sec], avgStageTime: [13174.541528239202, 3965.537] [msec], ratio: 0.23937098339972684
+       Test: 2, Config: (max.cores: 28, execs: 1.0, exec.cores: 28)
+           SVD Time: 3737.244991447 [sec], avgStageTime: [12008.913621262458, 3614.683] [msec], ratio: 0.16628435521556106
+       Test: 3, Config: (max.cores: 24, execs: 1.0, exec.cores: 24)
+           SVD Time: 3603.517910003 [sec], avgStageTime: [11573.574750830565, 3483.646] [msec], ratio: 0.13513819298763685
+       Test: 4, Config: (max.cores: 20, execs: 1.0, exec.cores: 20)
+           SVD Time: 3606.182056167 [sec], avgStageTime: [11586.475083056479, 3487.529] [msec], ratio: 0.13593641786842725
+       Test: 5, Config: (max.cores: 16, execs: 1.0, exec.cores: 16)
+           SVD Time: 3536.481868777 [sec], avgStageTime: [11353.132890365448, 3417.293] [msec], ratio: 0.11854819842966591
+       Test: 6, Config: (max.cores: 12, execs: 1.0, exec.cores: 12)
+           SVD Time: 3123.337385798 [sec], avgStageTime: [9986.976744186046, 3006.08] [msec], ratio: 0.0
+Testing Scenarios for exec.cores:

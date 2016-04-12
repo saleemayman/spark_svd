@@ -29,7 +29,7 @@ def main(argv):
     nFiles = len(resultsCSV)
     cmap = get_rand_color(nFiles)
     markers = ['x', 'o', '^', '+', 's', 'v', '<', '>']
-    xlabel = 'Number of Executors (spark.max.cores = 64)'
+    xlabel = 'Number of Executors'
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -50,7 +50,7 @@ def main(argv):
 
             print 'execs: ' + str(numExecutors[j]) + ', cores: ' + str(numCores[j]) + ', avg. time: ' + str(avgSVDTime[j])
 
-            ax.bar(j + width, avgSVDTime[j], 0.5, bottom=0, align='center', color='r')
+            ax.bar(j + width, avgSVDTime[j], 0.5, bottom=0, align='center', color='b')
 
         width = width + 0.5
         # line plot
@@ -66,7 +66,7 @@ def main(argv):
     # ax.xaxis.set_ticks(range(0, 288+1, 24))
     ax.set_xlabel(xlabel)
     ax.set_ylabel('Avg. Time to compute SVD [sec]')
-    ax.set_title('Compute times for different number of Executors (10M Data-set)')
+    # ax.set_title('Compute times for different number of Executors (10M Data-set)')
     # ax.annotate('Max. Cores=64', xy=(-125, -175), xycoords='axes pixels', bbox=dict(boxstyle='square', fc='yellow', alpha=0.3))
 
     # remove duplicate legends

@@ -1,0 +1,118 @@
+* * * * Start Test => [maxCores: 32, execCores: 32, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1888.7042253521126, numTreeAggStages: 71
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 24, execCores: 24, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1969.7943262411347, numTreeAggStages: 141
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 16, execCores: 16, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1932.7867298578199, numTreeAggStages: 211
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 8, execCores: 8, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1803.1779359430604, numTreeAggStages: 281
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+Test: 1 ->  Avg. Stage Time: 1888.7042253521126 [msec], changeRatio: 0.0452830508139026
+Test: 2 ->  Avg. Stage Time: 1969.7943262411347 [msec], changeRatio: 0.08458567885918344
+Test: 3 ->  Avg. Stage Time: 1932.7867298578199 [msec], changeRatio: 0.06705799036828741
+Test: 4 ->  Avg. Stage Time: 1803.1779359430604 [msec], changeRatio: 0.0
+* * * * Start Test => [maxCores: 32, execCores: 30, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1863.2364672364672, numTreeAggStages: 351
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 12, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1705.5581947743467, numTreeAggStages: 421
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 10, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1556.346232179226, numTreeAggStages: 491
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 8, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1427.4777183600713, numTreeAggStages: 561
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 6, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1330.6830427892235, numTreeAggStages: 631
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 4, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1244.8045649072753, numTreeAggStages: 701
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 2, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1184.798962386511, numTreeAggStages: 771
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 8, execCores: 6, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1224.0463733650415, numTreeAggStages: 841
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 8, execCores: 4, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1199.4742041712404, numTreeAggStages: 911
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 8, execCores: 2, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1170.295616717635, numTreeAggStages: 981
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 28, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1219.6127497621312, numTreeAggStages: 1051
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 26, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1256.9384478144514, numTreeAggStages: 1121
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 24, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1283.294710327456, numTreeAggStages: 1191
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 22, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1307.1538461538462, numTreeAggStages: 1261
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 20, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1331.2915101427498, numTreeAggStages: 1331
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 18, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1348.9685938615276, numTreeAggStages: 1401
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 16, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1327.3555404486744, numTreeAggStages: 1471
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+* * * * Start Test => [maxCores: 32, execCores: 14, execMem: 1g] * * * *
+readData --> data partitions: 2
+Listener --> avgTreeAggStageTime: 1307.293316028553, numTreeAggStages: 1541
+* * * * * * * * * * * * * * * * * * * * Test Completed * * * * * * * * * * * * * * * * * * * * * *
+Test: 1 ->  Avg. Stage Time: 1863.2364672364672 [msec], changeRatio: 0.3719017219250731
+Test: 10 ->  Avg. Stage Time: 1705.5581947743467 [msec], changeRatio: 0.31383425068502535
+Test: 11 ->  Avg. Stage Time: 1556.346232179226 [msec], changeRatio: 0.24804931414331588
+Test: 12 ->  Avg. Stage Time: 1427.4777183600713 [msec], changeRatio: 0.18016540527013947
+Test: 13 ->  Avg. Stage Time: 1330.6830427892235 [msec], changeRatio: 0.12053014949029695
+Test: 14 ->  Avg. Stage Time: 1244.8045649072753 [msec], changeRatio: 0.059855940675466845
+Test: 15 ->  Avg. Stage Time: 1184.798962386511 [msec], changeRatio: 0.012241187010885057
+Test: 16 ->  Avg. Stage Time: 1224.0463733650415 [msec], changeRatio: 0.04391235317305797
+Test: 17 ->  Avg. Stage Time: 1199.4742041712404 [msec], changeRatio: 0.024326148367455613
+Test: 18 ->  Avg. Stage Time: 1170.295616717635 [msec], changeRatio: 0.0
+Test: 2 ->  Avg. Stage Time: 1219.6127497621312 [msec], changeRatio: 0.04043671489504741
+Test: 3 ->  Avg. Stage Time: 1256.9384478144514 [msec], changeRatio: 0.06893164199684543
+Test: 4 ->  Avg. Stage Time: 1283.294710327456 [msec], changeRatio: 0.0880538918304955
+Test: 5 ->  Avg. Stage Time: 1307.1538461538462 [msec], changeRatio: 0.10469940461782756
+Test: 6 ->  Avg. Stage Time: 1331.2915101427498 [msec], changeRatio: 0.12093211156123995
+Test: 7 ->  Avg. Stage Time: 1348.9685938615276 [msec], changeRatio: 0.1324515470241061
+Test: 8 ->  Avg. Stage Time: 1327.3555404486744 [msec], changeRatio: 0.11832543651262406
+Test: 9 ->  Avg. Stage Time: 1307.293316028553 [msec], changeRatio: 0.10479492064344464
+Test: 1 -> Avg. Stage Time: 1888.7042253521126 [msec], Config: [max.cores: 32, exec.cores: 32, exec.mem: 1g]
+Test: 4 -> Avg. Stage Time: 1803.1779359430604 [msec], Config: [max.cores: 8, exec.cores: 8, exec.mem: 1g]
+Test: 15 -> Avg. Stage Time: 1184.798962386511 [msec], Config: [max.cores: 32, exec.cores: 2, exec.mem: 1g]
+Test: 16 -> Avg. Stage Time: 1224.0463733650415 [msec], Config: [max.cores: 8, exec.cores: 6, exec.mem: 1g]
+Test: 17 -> Avg. Stage Time: 1199.4742041712404 [msec], Config: [max.cores: 8, exec.cores: 4, exec.mem: 1g]
+Test: 18 -> Avg. Stage Time: 1170.295616717635 [msec], Config: [max.cores: 8, exec.cores: 2, exec.mem: 1g]
+Test: 2 -> Avg. Stage Time: 1219.6127497621312 [msec], Config: [max.cores: 32, exec.cores: 28, exec.mem: 1g]
+test_object will now exit!

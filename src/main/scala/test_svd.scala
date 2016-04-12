@@ -1,6 +1,7 @@
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.SparkConf
+import org.apache.spark.scheduler._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.mllib.linalg._
 import org.apache.spark.mllib.linalg.{Vector, Vectors}
@@ -9,13 +10,50 @@ import org.apache.spark.mllib.linalg.distributed.RowMatrix
 import org.apache.spark.mllib.linalg.SingularValueDecomposition
 import org.apache.spark.mllib.linalg.distributed.{CoordinateMatrix, MatrixEntry}
 
+
+class mySparkListener extends SparkListener
+{
+    val stageName: String = "treeAggregate"
+    override def onStageCompleted(stageCompleted: SparkListenerStageCompleted): Unit = {
+        val rddPartitions: Int = test_svd.getMainRDDNumPartitions()
+        
+        if ((stageCompleted.stageInfo.name).take(stageName.length) == stageName && rddPartitions == stageCompleted.stageInfo.rddInfos(0).numPartitions)
+        {
+            val t: Double = (stageCompleted.stageInfo.completionTime.get).toDouble - (stageCompleted.stageInfo.submissionTime.get).toDouble
+
+            test_svd.updateStageTimeArray(t)
+        }
+    }
+
+    override def onApplicationEnd(appEnded: SparkListenerApplicationEnd): Unit = {
+        test_svd.computeStageStats()
+    }
+}
+
 object test_svd
 {
     val GIGS: Long = 1000000000
+    var avgStageTime: Double = _
+    var numTreeAggStages: Int = 1
+    var treeAggStageTimes: Array[Double] = Array()
     
     // init spark conctext
     val conf = new SparkConf().setAppName("testSvd1")
     val sc = new SparkContext(conf)
+
+    def getMainRDDNumPartitions(): Int = {
+        sc.getRDDStorageInfo(0).numPartitions
+    }
+
+    def updateStageTimeArray(t: Double): Unit = {
+        treeAggStageTimes :+= t
+        numTreeAggStages = numTreeAggStages + 1
+    }
+
+    def computeStageStats(): Unit = {
+        avgStageTime = treeAggStageTimes.sum/numTreeAggStages.toDouble
+        println(s"Listener --> avgTreeAggStageTime: ${avgStageTime}, numTreeAggStages: ${numTreeAggStages}")
+    }
 
     def main(args: Array[String])
     {
@@ -29,6 +67,9 @@ object test_svd
         val numPartitions: Int = args(2).toInt 
         val numSingularValues: Int = args(3).toInt 
         println("Input file name: " + file)
+
+        val myListener: SparkListener = new mySparkListener()
+        sc.addSparkListener(myListener: SparkListener)
 
         // read the data as an RDD
         t1 = System.nanoTime()

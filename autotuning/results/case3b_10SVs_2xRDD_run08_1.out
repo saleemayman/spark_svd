@@ -1,0 +1,12 @@
+Input file name: data/ratingsNoTime.dat
+1. RDD num. of Partitions: 2
+File-to-RDD time [sec]: 0
+2. RDD num. of Partitions: 40
+Number of entries: 1000209
+Number of cols per entry: 3
+dataCoordMatrix dimensions: [6040 x 3952]
+Data converted to RowMatrix, time [sec]: 0
+Starting SVD...
+SVD computed, time [sec]: 90
+Total program run-time [sec]: 101
+Listener --> avgTreeAggStageTime: 2251.2105263157896, numTreeAggStages: 38

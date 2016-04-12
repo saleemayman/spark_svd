@@ -1,0 +1,51 @@
+Testing Scenarios for max.cores:
+       Test: 1, Config: (max.cores: 32, execs: 1.0, exec.cores: 32)
+           SVD Time: 1012.385650446 [sec], avgStageTime: [24584.815789473683, 934.223] [msec], ratio: 0.0
+       Test: 2, Config: (max.cores: 24, execs: 1.0, exec.cores: 24)
+           SVD Time: 1027.12055208 [sec], avgStageTime: [25239.36842105263, 959.0959999999999] [msec], ratio: 0.019941381312386097
+       Test: 3, Config: (max.cores: 16, execs: 1.0, exec.cores: 16)
+           SVD Time: 1028.598877393 [sec], avgStageTime: [25001.342105263157, 950.051] [msec], ratio: 0.01619347986376274
+Testing Scenarios for exec.cores:
+       Test: 1, Config: (max.cores: 24, execs: 2.0, exec.cores: 12)
+           SVD Time: 552.292961368 [sec], avgStageTime: [11782.0, 506.626] [msec], ratio: 0.6834227475954134
+       Test: 10, Config: (max.cores: 32, execs: 8.0, exec.cores: 4)
+           SVD Time: 186.908701624 [sec], avgStageTime: [4009.0263157894738, 152.343] [msec], ratio: 0.011855640799284028
+       Test: 11, Config: (max.cores: 32, execs: 16.0, exec.cores: 2)
+           SVD Time: 185.441655309 [sec], avgStageTime: [3941.7894736842104, 149.788] [msec], ratio: 0.0
+       Test: 12, Config: (max.cores: 32, execs: 32.0, exec.cores: 1)
+           SVD Time: 206.594987509 [sec], avgStageTime: [4185.1578947368425, 159.03600000000003] [msec], ratio: 0.08314758113671006
+       Test: 13, Config: (max.cores: 16, execs: 2.0, exec.cores: 8)
+           SVD Time: 392.135829518 [sec], avgStageTime: [8129.837209302325, 349.583] [msec], ratio: 0.548036746583815
+       Test: 14, Config: (max.cores: 16, execs: 4.0, exec.cores: 4)
+           SVD Time: 277.169541372 [sec], avgStageTime: [6310.578947368421, 239.802] [msec], ratio: 0.35155104588672714
+       Test: 15, Config: (max.cores: 16, execs: 8.0, exec.cores: 2)
+           SVD Time: 275.851027965 [sec], avgStageTime: [6355.394736842105, 241.505] [msec], ratio: 0.35203295759863296
+       Test: 16, Config: (max.cores: 16, execs: 16.0, exec.cores: 1)
+           SVD Time: 264.850890966 [sec], avgStageTime: [5947.0, 225.986] [msec], ratio: 0.31702432828704963
+       Test: 2, Config: (max.cores: 24, execs: 3.0, exec.cores: 8)
+           SVD Time: 239.456999637 [sec], avgStageTime: [5293.394736842105, 201.149] [msec], ratio: 0.23916230013848172
+       Test: 3, Config: (max.cores: 24, execs: 4.0, exec.cores: 6)
+           SVD Time: 215.926043444 [sec], avgStageTime: [4753.289473684211, 180.625] [msec], ratio: 0.1546368094317212
+       Test: 4, Config: (max.cores: 24, execs: 6.0, exec.cores: 4)
+           SVD Time: 203.318147295 [sec], avgStageTime: [4524.894736842105, 171.946] [msec], ratio: 0.10668349820940493
+       Test: 5, Config: (max.cores: 24, execs: 8.0, exec.cores: 3)
+           SVD Time: 194.306539634 [sec], avgStageTime: [4273.131578947368, 162.379] [msec], ratio: 0.06015350200912584
+       Test: 6, Config: (max.cores: 24, execs: 12.0, exec.cores: 2)
+           SVD Time: 198.467101028 [sec], avgStageTime: [4393.868421052632, 166.967] [msec], ratio: 0.08265360466916494
+       Test: 7, Config: (max.cores: 24, execs: 24.0, exec.cores: 1)
+           SVD Time: 211.983619877 [sec], avgStageTime: [4525.789473684211, 171.98] [msec], ratio: 0.12692339077231207
+       Test: 8, Config: (max.cores: 32, execs: 2.0, exec.cores: 16)
+           SVD Time: 529.043160885 [sec], avgStageTime: [12431.473684210527, 472.396] [msec], ratio: 0.6652521007739021
+       Test: 9, Config: (max.cores: 32, execs: 4.0, exec.cores: 8)
+           SVD Time: 231.883975255 [sec], avgStageTime: [4419.6511627906975, 190.045] [msec], ratio: 0.2054832093330441
+Test: 1 -> SVD Time: 1012.385650446, Avg. Stage Time: 24584.815789473683 [msec], Config: [max.cores: 32, exec.cores: 32, exec.mem: 4g]
+Test: 2 -> SVD Time: 1027.12055208, Avg. Stage Time: 25239.36842105263 [msec], Config: [max.cores: 24, exec.cores: 24, exec.mem: 4g]
+Test: 3 -> SVD Time: 1028.598877393, Avg. Stage Time: 25001.342105263157 [msec], Config: [max.cores: 16, exec.cores: 16, exec.mem: 4g]
+Test: 10 -> SVD Time: 186.908701624, Avg. Stage Time: 4009.0263157894738 [msec], Config: [max.cores: 32, exec.cores: 4, exec.mem: 4g]
+Test: 11 -> SVD Time: 185.441655309, Avg. Stage Time: 3941.7894736842104 [msec], Config: [max.cores: 32, exec.cores: 2, exec.mem: 4g]
+Test: 12 -> SVD Time: 206.594987509, Avg. Stage Time: 4185.1578947368425 [msec], Config: [max.cores: 32, exec.cores: 1, exec.mem: 4g]
+Test: 4 -> SVD Time: 203.318147295, Avg. Stage Time: 4524.894736842105 [msec], Config: [max.cores: 24, exec.cores: 4, exec.mem: 4g]
+Test: 5 -> SVD Time: 194.306539634, Avg. Stage Time: 4273.131578947368 [msec], Config: [max.cores: 24, exec.cores: 3, exec.mem: 4g]
+Test: 6 -> SVD Time: 198.467101028, Avg. Stage Time: 4393.868421052632 [msec], Config: [max.cores: 24, exec.cores: 2, exec.mem: 4g]
+Test: 7 -> SVD Time: 211.983619877, Avg. Stage Time: 4525.789473684211 [msec], Config: [max.cores: 24, exec.cores: 1, exec.mem: 4g]
+test_object will now exit!

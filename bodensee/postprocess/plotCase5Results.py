@@ -28,8 +28,14 @@ def main(argv):
 
     # read the individual csv files for logFileName
     nFiles = len(resultsCSV)
-    cmap = get_rand_color(nFiles)
-    markers = ['x', 'o', '^', '+', 's', 'v', '<', '>']
+
+    if (logFileName == 'case5'):
+        # cmap = get_rand_color(nFiles)
+        cmap = ['r', 'k', 'b', 'g'] 
+    else:
+        cmap = ['r', 'k', 'b']
+
+    markers = ['o', '^', 's', 'v', '<', '>', 'x', '+']
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -42,13 +48,14 @@ def main(argv):
 
         if (logFileName == 'case5'):
             # parallelism-to-partitions ratio
-            x = parallelism/numPartitions
             # x = parallelism/32
-            xlabel = 'default.parallelism/numPartitions ratio'
+            x = parallelism/numPartitions
+            xlabel = 'parallelism-to-numPartitions ratio'
         else:
             # parallelism-to-cores ratio
+            # x = parallelism/numPartitions
             x = parallelism/32
-            xlabel = 'tasks per core (parallelism/cores ratio)'
+            xlabel = 'tasks per core (parallelism-to-cores ratio)'
 
         avgSVDTime = np.empty(len(parallelism), dtype=float)
         parToPartitionRatio = np.empty(len(parallelism), dtype=float)
@@ -70,7 +77,7 @@ def main(argv):
 
 
     # ax.set_xlim([0, 288])
-    # ax.set_ylim([50, 500])
+    # ax.set_ylim([100, 300])
     # ax.xaxis.set_ticks(range(0, 288+1, 24))
     ax.set_xlabel(xlabel)
     ax.set_ylabel('Avg. Time to compute SVD [sec]')

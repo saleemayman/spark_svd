@@ -18,13 +18,13 @@ def main(argv):
     ax1.plot(timeSVD[:, 1], timeSVD[:, 3], color='r', marker='o')
     ax1.set_xlim([0, max(timeSVD[:, 1])])
     ax1.set_ylim([min(timeSVD[:, 3]) - 20, max(timeSVD[:, 3]) + 10])
-    ax1.set_xlabel('Cores per Executor')
+    ax1.set_xlabel('spark.cores.max')
     ax1.set_ylabel('Time to compute SVD [sec]')
     ax1.set_title('Execution times')
 
-    ax1.annotate('Workers=1\nExecutors=1\nPartitions = same as number \nof cores per executor',
-                 xy=(-250, -100), xycoords='axes pixels',
-                 bbox=dict(boxstyle='square', fc='yellow', alpha=0.3))
+    # ax1.annotate('Workers=1\nExecutors=1\nPartitions = same as number \nof cores per executor',
+    #              xy=(-250, -100), xycoords='axes pixels',
+    #              bbox=dict(boxstyle='square', fc='yellow', alpha=0.3))
 
     # speed-up graph
     ax2 = fig.add_subplot(122)
@@ -34,12 +34,12 @@ def main(argv):
     ax2.plot(timeSVD[:, 1], speedUp, color='g', marker='o')
     ax2.set_xlim([0, max(timeSVD[:, 1])])
     ax2.set_ylim([0, max(speedUp) + 1])
-    ax2.set_xlabel('Cores per Executor')
+    ax2.set_xlabel('spark.cores.max')
     ax2.set_ylabel('Speed-up')
     ax2.set_title(plotTitle)
-    ax2.annotate('Workers=1\nExecutors=1\nPartitions = same as number \nof cores per executor',
-                 xy=(-250, 10), xycoords='axes pixels',
-                 bbox=dict(boxstyle='square', fc='yellow', alpha=0.3))
+    # ax2.annotate('Workers=1\nExecutors=1\nPartitions = same as number \nof cores per executor',
+    #              xy=(-250, 10), xycoords='axes pixels',
+    #              bbox=dict(boxstyle='square', fc='yellow', alpha=0.3))
 
     plt.show()
 

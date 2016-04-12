@@ -1,0 +1,25 @@
+Testing Scenarios for max.cores:
+       Test: 1, Config: (max.cores: 32, execs: 1.0, exec.cores: 32)
+           SVD Time: 188.5195088 [sec], avgStageTime: 1863.3516483516485 [msec], ratio: 0.21245456042160027
+       Test: 2, Config: (max.cores: 28, execs: 1.0, exec.cores: 28)
+           SVD Time: 221.105468704 [sec], avgStageTime: 1905.25 [msec], ratio: 0.32852099815876656
+       Test: 3, Config: (max.cores: 24, execs: 1.0, exec.cores: 24)
+           SVD Time: 191.14999796 [sec], avgStageTime: 1897.2097902097903 [msec], ratio: 0.2232922782553819
+       Test: 4, Config: (max.cores: 20, execs: 1.0, exec.cores: 20)
+           SVD Time: 168.321810335 [sec], avgStageTime: 1849.1117021276596 [msec], ratio: 0.11795340644498542
+       Test: 5, Config: (max.cores: 16, execs: 1.0, exec.cores: 16)
+           SVD Time: 202.256846584 [sec], avgStageTime: 1832.7817047817048 [msec], ratio: 0.26594485212969354
+       Test: 6, Config: (max.cores: 12, execs: 1.0, exec.cores: 12)
+           SVD Time: 197.665614227 [sec], avgStageTime: 1815.1860068259386 [msec], ratio: 0.24889475588556786
+       Test: 7, Config: (max.cores: 8, execs: 1.0, exec.cores: 8)
+           SVD Time: 173.277139303 [sec], avgStageTime: 1767.7901591895802 [msec], ratio: 0.14317791703969152
+       Test: 8, Config: (max.cores: 4, execs: 1.0, exec.cores: 4)
+           SVD Time: 148.467679427 [sec], avgStageTime: 1737.7106274007683 [msec], ratio: 0.0
+Testing Scenarios for exec.cores:
+       Test: 1, Config: (max.cores: 4, execs: 2.0, exec.cores: 2)
+           SVD Time: 166.545714615 [sec], avgStageTime: 1703.528216704289 [msec], ratio: 0.15114096608363226
+       Test: 2, Config: (max.cores: 4, execs: 4.0, exec.cores: 1)
+           SVD Time: 141.373834411 [sec], avgStageTime: 1677.0665983606557 [msec], ratio: 0.0
+Test: 8 -> Avg. Stage Time: 1737.7106274007683 [msec], Config: [max.cores: 4, exec.cores: 4, exec.mem: 1g]
+Test: 2 -> Avg. Stage Time: 1677.0665983606557 [msec], Config: [max.cores: 4, exec.cores: 1, exec.mem: 1g]
+test_object will now exit!

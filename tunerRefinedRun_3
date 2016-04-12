@@ -1,0 +1,49 @@
+Testing Scenarios for max.cores:
+       Test: 1, Config: (max.cores: 32, execs: 1.0, exec.cores: 32)
+           SVD Time: 308.273792612 [sec], avgStageTime: 1897.4569536423842 [msec], ratio: 0.10738935167357277
+       Test: 2, Config: (max.cores: 28, execs: 1.0, exec.cores: 28)
+           SVD Time: 292.424074024 [sec], avgStageTime: 1861.9568106312292 [msec], ratio: 0.09037080135707787
+       Test: 3, Config: (max.cores: 24, execs: 1.0, exec.cores: 24)
+           SVD Time: 304.58595379 [sec], avgStageTime: 1870.7782705099778 [msec], ratio: 0.094660063001206
+       Test: 4, Config: (max.cores: 20, execs: 1.0, exec.cores: 20)
+           SVD Time: 281.106822081 [sec], avgStageTime: 1840.9168053244593 [msec], ratio: 0.0799745666596241
+       Test: 5, Config: (max.cores: 16, execs: 1.0, exec.cores: 16)
+           SVD Time: 321.788665983 [sec], avgStageTime: 1815.2409793814434 [msec], ratio: 0.06696119093821173
+       Test: 6, Config: (max.cores: 12, execs: 1.0, exec.cores: 12)
+           SVD Time: 266.563517009 [sec], avgStageTime: 1788.4395248380129 [msec], ratio: 0.052978723607877476
+       Test: 7, Config: (max.cores: 8, execs: 1.0, exec.cores: 8)
+           SVD Time: 226.937226008 [sec], avgStageTime: 1693.6902815622161 [msec], ratio: 0.0
+Testing Scenarios for exec.cores:
+       Test: 1, Config: (max.cores: 16, execs: 2.0, exec.cores: 8)
+           SVD Time: 151.123881361 [sec], avgStageTime: 1564.4278996865203 [msec], ratio: 0.33988106710336374
+       Test: 10, Config: (max.cores: 12, execs: 4.0, exec.cores: 3)
+           SVD Time: 102.236004305 [sec], avgStageTime: 1458.9263674614306 [msec], ratio: 0.29214489588550596
+       Test: 11, Config: (max.cores: 12, execs: 6.0, exec.cores: 2)
+           SVD Time: 104.576175586 [sec], avgStageTime: 1374.7138324873097 [msec], ratio: 0.2487829457085755
+       Test: 12, Config: (max.cores: 12, execs: 12.0, exec.cores: 1)
+           SVD Time: 103.63565928 [sec], avgStageTime: 1303.5573580533023 [msec], ratio: 0.20777672777129597
+       Test: 2, Config: (max.cores: 16, execs: 4.0, exec.cores: 4)
+           SVD Time: 94.159320051 [sec], avgStageTime: 1239.5788912579958 [msec], ratio: 0.1668876559468193
+       Test: 3, Config: (max.cores: 16, execs: 8.0, exec.cores: 2)
+           SVD Time: 87.141585192 [sec], avgStageTime: 1181.3988153998025 [msec], ratio: 0.12585956387191055
+       Test: 4, Config: (max.cores: 16, execs: 16.0, exec.cores: 1)
+           SVD Time: 94.42178161 [sec], avgStageTime: 1132.703125 [msec], ratio: 0.08827966221529437
+       Test: 5, Config: (max.cores: 8, execs: 2.0, exec.cores: 4)
+           SVD Time: 144.228916801 [sec], avgStageTime: 1114.1014617368874 [msec], ratio: 0.07305706777837262
+       Test: 6, Config: (max.cores: 8, execs: 4.0, exec.cores: 2)
+           SVD Time: 132.018977409 [sec], avgStageTime: 1092.502423263328 [msec], ratio: 0.05473118068693206
+       Test: 7, Config: (max.cores: 8, execs: 8.0, exec.cores: 1)
+           SVD Time: 134.425279181 [sec], avgStageTime: 1073.6751713632902 [msec], ratio: 0.038155576957676574
+       Test: 8, Config: (max.cores: 12, execs: 2.0, exec.cores: 6)
+           SVD Time: 128.404014587 [sec], avgStageTime: 1055.2773775216137 [msec], ratio: 0.021386701039518785
+       Test: 9, Config: (max.cores: 12, execs: 3.0, exec.cores: 4)
+           SVD Time: 110.327214311 [sec], avgStageTime: 1032.7084757347916 [msec], ratio: 0.0
+Test: 5 -> Avg. Stage Time: 1815.2409793814434 [msec], Config: [max.cores: 16, exec.cores: 16, exec.mem: 1g]
+Test: 6 -> Avg. Stage Time: 1788.4395248380129 [msec], Config: [max.cores: 12, exec.cores: 12, exec.mem: 1g]
+Test: 7 -> Avg. Stage Time: 1693.6902815622161 [msec], Config: [max.cores: 8, exec.cores: 8, exec.mem: 1g]
+Test: 5 -> Avg. Stage Time: 1114.1014617368874 [msec], Config: [max.cores: 8, exec.cores: 4, exec.mem: 1g]
+Test: 6 -> Avg. Stage Time: 1092.502423263328 [msec], Config: [max.cores: 8, exec.cores: 2, exec.mem: 1g]
+Test: 7 -> Avg. Stage Time: 1073.6751713632902 [msec], Config: [max.cores: 8, exec.cores: 1, exec.mem: 1g]
+Test: 8 -> Avg. Stage Time: 1055.2773775216137 [msec], Config: [max.cores: 12, exec.cores: 6, exec.mem: 1g]
+Test: 9 -> Avg. Stage Time: 1032.7084757347916 [msec], Config: [max.cores: 12, exec.cores: 4, exec.mem: 1g]
+test_object will now exit!

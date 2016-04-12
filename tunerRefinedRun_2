@@ -1,0 +1,29 @@
+Testing Scenarios for max.cores:
+       Test: 1, Config: (max.cores: 32, execs: 1.0, exec.cores: 32)
+           SVD Time: 302.397607163 [sec], avgStageTime: 1856.1456953642385 [msec], ratio: 0.0
+       Test: 2, Config: (max.cores: 28, execs: 1.0, exec.cores: 28)
+           SVD Time: 294.185203968 [sec], avgStageTime: 3679.1655629139073 [msec], ratio: 0.4954981873949247
+       Test: 3, Config: (max.cores: 24, execs: 1.0, exec.cores: 24)
+           SVD Time: 312.302057315 [sec], avgStageTime: 5624.046357615894 [msec], ratio: 0.6699625896840788
+       Test: 4, Config: (max.cores: 20, execs: 1.0, exec.cores: 20)
+           SVD Time: 284.094484952 [sec], avgStageTime: 7384.026490066225 [msec], ratio: 0.7486268910517422
+       Test: 5, Config: (max.cores: 16, execs: 1.0, exec.cores: 16)
+           SVD Time: 322.937128715 [sec], avgStageTime: 8053.829545454545 [msec], ratio: 0.7695325329536161
+       Test: 6, Config: (max.cores: 12, execs: 1.0, exec.cores: 12)
+           SVD Time: 258.904915679 [sec], avgStageTime: 10986.58940397351 [msec], ratio: 0.8310535119576847
+       Test: 7, Config: (max.cores: 8, execs: 1.0, exec.cores: 8)
+           SVD Time: 279.912437181 [sec], avgStageTime: 10913.880681818182 [msec], ratio: 0.8299279835030213
+Testing Scenarios for exec.cores:
+       Test: 1, Config: (max.cores: 32, execs: 2.0, exec.cores: 16)
+           SVD Time: 294.578189677 [sec], avgStageTime: 12477.982954545454 [msec], ratio: 0.0
+       Test: 2, Config: (max.cores: 32, execs: 4.0, exec.cores: 8)
+           SVD Time: 229.007520606 [sec], avgStageTime: 15941.582781456953 [msec], ratio: 0.2172682521173691
+       Test: 3, Config: (max.cores: 32, execs: 8.0, exec.cores: 4)
+           SVD Time: 160.165228281 [sec], avgStageTime: 16882.172185430463 [msec], ratio: 0.2608781134625485
+       Test: 4, Config: (max.cores: 32, execs: 16.0, exec.cores: 2)
+           SVD Time: 126.780451296 [sec], avgStageTime: 17599.046357615895 [msec], ratio: 0.29098527835028554
+       Test: 5, Config: (max.cores: 32, execs: 32.0, exec.cores: 1)
+           SVD Time: 149.318560278 [sec], avgStageTime: 18331.973509933774 [msec], ratio: 0.31933226132015435
+Test: 1 -> Avg. Stage Time: [D@ce70bfd8 [msec], Config: [max.cores: 32, exec.cores: 32, exec.mem: 1g]
+Test: 1 -> Avg. Stage Time: [D@213e15ba [msec], Config: [max.cores: 32, exec.cores: 16, exec.mem: 1g]
+test_object will now exit!
